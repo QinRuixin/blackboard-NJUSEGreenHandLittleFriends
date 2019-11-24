@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/schedule?characterEncoding=UTF-8&serverTimezone=GMT%2B8
+    username: Allen
+    password: qweasd
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 100MB
+#  resources:
+#    static-locations: classpath:mapper/, file:mapper/
+
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.njuse.schedule.entity
+
+
+file:
+  maxUploadSizeMB: 10
+  savePath: img
+server:
+  port: 8888
+

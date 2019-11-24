@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.njuse.schedule.dao.ActivityMapper">
+
+    <resultMap id="ActivityResultMap" type="com.njuse.schedule.entity.ActivityEntity">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="user_id" jdbcType="INTEGER" property="userId" />
+        <result column="isAuthor" jdbcType="INTEGER" property="isAuthor"/>
+
+        <result column="title" jdbcType="VARCHAR" property="title" />
+        <result column="content" jdbcType="LONGVARCHAR" property="content" />
+        <result column="createtime" jdbcType="BIGINT" property="createTime" />
+        <result column="starttime" jdbcType="BIGINT" property="startTime" />
+        <result column="endtime" jdbcType="BIGINT" property="endTime" />
+        <result column="isFinished" jdbcType="INTEGER" property="isFinished"/>
+        <result column="isPublic" jdbcType="INTEGER" property="isPublic"/>
+        <result column="poster_url" jdbcType="LONGVARCHAR" property="posterUrl" />
+    </resultMap>
+
+
+    <insert id="insertOneActivity" useGeneratedKeys="true" keyProperty="id" parameterType="com.njuse.schedule.form.ActivityForm">
+        insert into activity(user_id, isAuthor, title, createtime, starttime, endtime, poster_url, content,isPublic)
+        values (#{userId},#{isAuthor},#{title},#{createTime},#{startTime},#{endTime},#{posterUrl},#{content},#{isPublic})
+    </insert>
+
+    <insert id="insertOneUserActivityRecord" useGeneratedKeys="true">
+        insert into u_a(u_id, a_id)
+        values (#{userId},#{activityId})
+    </insert>
+
+    <select id="selectActivityById" resultMap="ActivityResultMap">
+        select *
+        from activity
+        where id = #{id}
+    </select>
+
+    <select id="selectAllPublicActivity" resultMap="ActivityResultMap">
+        select *
+        from activity
+        where isPublic = 1
+        order by createtime
+    </select>
+
+    <select id="selectActivityByUserId" resultMap="ActivityResultMap">
+        select *
+        from (select a_id as activity_id from u_a where u_id = #{userId}) a,
+            activity
+        where a.activity_id=activity.id
+        order by starttime
+    </select>
+
+    <update id="updateActivity" parameterType="com.njuse.schedule.form.ActivityForm">
+        update activity
+        set title= #{title},
+            starttime= #{startTime},
+            endtime= #{endTime},
+            poster_url= #{posterUrl},
+            content= #{content},
+            isPublic= #{isPublic}
+        where id=#{id}
+    </update>
+
+
+</mapper>
